@@ -11,7 +11,7 @@ export async function GET(req: Request) {
 
   // Cache no lado do servidor por 5 minutos
   const response = await fetch('http://localhost:3000/mocks/available-times.json', {
-    next: { revalidate: 300 }
+    next: { revalidate: 100 }
   })
 
   console.log('Date received:', date)

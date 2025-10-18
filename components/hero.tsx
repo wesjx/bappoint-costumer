@@ -1,4 +1,4 @@
-import Link from "next/link";
+'use client'
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 
@@ -21,19 +21,27 @@ export default function Hero() {
                             </p>
                         </div>
                         <div className="space-x-4">
-                            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                                <Link href="#booking">
-                                    Book Now
-                                </Link>
+                            <Button
+                                onClick={() => {
+                                    const element = document.getElementById("booking")
+                                    if (element) {
+                                        element.scrollIntoView({ behavior: "smooth" })
+                                    }
+                                }} size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
+                                Book Now
                             </Button>
                             <Button
+                                onClick={() => {
+                                    const element = document.getElementById("services")
+                                    if (element) {
+                                        element.scrollIntoView({ behavior: "smooth" })
+                                    }
+                                }}
                                 variant="outline"
                                 size="lg"
                                 className="border-slate-300 text-slate-700 hover:bg-slate-50 bg-transparent"
                             >
-                                <Link href="#services">
-                                    View Services
-                                </Link>
+                                View Services
                             </Button>
                         </div>
                     </div>

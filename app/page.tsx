@@ -1,10 +1,10 @@
 import { Header } from "@/components/header"
 import Hero from "@/components/hero"
 import Services from "@/components/services"
-import BookingForm from "@/components/booking_form"
 import Coments from "../components/coments"
 import Footer from "@/components/footer"
-
+import { BookingForm } from "@/components/booking/booking-form"
+import { BookingProvider } from "@/components/booking/hooks/booking-context"
 
 export default function Page() {
   return (
@@ -12,7 +12,9 @@ export default function Page() {
       <Header />
       <Hero />
       <Services />
-      <BookingForm />
+      <BookingProvider>
+        <BookingForm />
+      </BookingProvider>
       <Coments />
       <Footer />
     </div>
