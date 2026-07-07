@@ -1,25 +1,44 @@
-import { NextResponse } from 'next/server'
-import availableTimes from '@/public/mocks/available-times.json'
+import { NextResponse } from "next/server"
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const date = searchParams.get('date')
+import type { CompanyDTO } from "@/types/api/company"
+import type { SlotsAvailable } from "@/types/api/slots_available"
 
-  if (!date || typeof date !== 'string') {
-    return NextResponse.json({ times: [] })
+import { get, getCompanyBySlug } from "@/lib/api-client"
+
+const COMPANY_SLUG = process.env.NEXT_PUBLIC_COMPANY_SLUG!
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const date = searchParams.get("date")
+
+  if (!date) {
+    return NextResponse.json(
+      { error: "Missing date param" },
+      { status: 400 }
+    )
   }
 
-  // Cache no lado do servidor por 5 minutos
-  const response = await fetch('http://localhost:3000/mocks/available-times.json', {
-    next: { revalidate: 100 }
-  })
+  if (!COMPANY_SLUG) {
+    return NextResponse.json(
+      { error: "Missing NEXT_PUBLIC_COMPANY_SLUG" },
+      { status: 500 }
+    )
+  }
 
-  console.log('Date received:', date)
-  console.log('Available times:', availableTimes)
+  try {
+    const company: CompanyDTO = await getCompanyBySlug(COMPANY_SLUG)
 
+    const slots = await get<SlotsAvailable[]>(
+      `/companies/${company.id}/appointments/available-times?date=${date}`
+    )
 
-  const data = await response.json()
-  const times = data[date]
+    const times = slots.map((slot) => slot.start.split("T")[1])
 
-  return NextResponse.json({ times })
+    return NextResponse.json({ times })
+  } catch (err: any) {
+    return NextResponse.json(
+      { error: err.message ?? "Unknown error" },
+      { status: 500 }
+    )
+  }
 }
