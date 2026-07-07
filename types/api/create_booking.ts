@@ -12,6 +12,6 @@ export interface CreateBooking{
     totalAmount: number
     appointmentStatus: AppointmentStatus
     stripeSessionId: string
-    serviceIds: string
+    serviceIds: []
     companyId: string
 }
