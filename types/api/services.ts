@@ -1,4 +1,5 @@
-export interface service {
+export interface ServiceDTO {
+    id: string
     name: string
     price: number
     durationMinutes: number
